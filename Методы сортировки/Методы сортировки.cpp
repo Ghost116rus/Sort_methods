@@ -1,6 +1,6 @@
 ﻿// Методы сортировки.cpp : Этот файл содержит функцию "main". Здесь начинается и заканчивается выполнение программы.
 #include <iostream>
-#include <time.h> 
+
 
 int getValue(int condition, const char* string)
 {
@@ -166,11 +166,10 @@ int main()
 	setlocale(LC_ALL, "ru");
 	srand(time(NULL));
 	int* arr = nullptr;
-	int arr[6] = { 15, 33, 42, 07, 12, 19 };
 
 	std::cout << "Введите размер массива: "; int size = getValue(15, "Введите размер массива: ");
 	
-	//arr = Make_arr(size);
+	arr = Make_arr(size);
 	std::cout << "\nИсходный массив:\n"; Show_arr(arr, size);
 
 	int user_choice = -1;
@@ -239,5 +238,5 @@ int main()
 		user_choice = getValue(17, "Выберите действие: ");
 	}
 
-	//delete arr;
+	delete arr;
 }
