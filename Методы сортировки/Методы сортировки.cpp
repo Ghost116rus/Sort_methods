@@ -52,7 +52,7 @@ int getValue(int condition, const char* string)
 }
 
 
-void Buble_sort(int* arr, int n, unsigned long long& count_of_comparison, unsigned long long& count_of_exchanges, unsigned long long& overhead_costs)
+void Buble_sort(int* arr, int n, unsigned long long& count_of_comparison, unsigned long long& count_of_exchanges)
 {
 	for (size_t i = 1; i < n; i++)
 	{
@@ -64,7 +64,6 @@ void Buble_sort(int* arr, int n, unsigned long long& count_of_comparison, unsign
 				arr[j - 1] = arr[j];
 				arr[j] = temp;
 				count_of_exchanges++;
-				overhead_costs += 2;
 			}
 			count_of_comparison++;
 		}
@@ -72,32 +71,34 @@ void Buble_sort(int* arr, int n, unsigned long long& count_of_comparison, unsign
 	}
 }
 
-void Insertion_sort(int* arr, int n, unsigned long long& count_of_comparison, unsigned long long& count_of_exchanges, unsigned long long& overhead_costs)
+void Insertion_sort(int* arr, int n, unsigned long long& count_of_comparison, unsigned long long& count_of_exchanges)
 {
 	for (size_t i = 1; i < n; i++)
 	{
-		int j = i - 1; overhead_costs++;
+		int j = i - 1; 
 
 		while ((++count_of_comparison)&&(j >= 0)&&(arr[i] < arr[j]))
 		{
-			j--;  overhead_costs++;
+			j--;
 		}
 
 		if ((j + 1) != i)
 		{
-			int temp = arr[i];	int l = i - 1;	overhead_costs+=2;
+			int temp = arr[i];	int l = i - 1; count_of_exchanges++;
 			while (l >= j + 1)
 			{
-				arr[l + 1] = arr[l]; l--;	overhead_costs+=2;
+				arr[l + 1] = arr[l]; l--;
 				count_of_exchanges++;
 			}
-			arr[j + 1] = temp;		overhead_costs++;
+			arr[j + 1] = temp;
+			count_of_exchanges++;
 		}
 
 	}
+	count_of_exchanges = count_of_exchanges / 3;
 }
 
-void Selection_sort(int* arr, int n, unsigned long long& count_of_comparison, unsigned long long& count_of_exchanges, unsigned long long& overhead_costs)
+void Selection_sort(int* arr, int n, unsigned long long& count_of_comparison, unsigned long long& count_of_exchanges)
 {
 	for (size_t i = 0; i < n - 1; i++)
 	{
@@ -107,7 +108,7 @@ void Selection_sort(int* arr, int n, unsigned long long& count_of_comparison, un
 			count_of_comparison++;
 			if (arr[j] < arr[min]) 
 			{ 
-				min = j; overhead_costs++;
+				min = j; 
 			}
 		}
 		if (i != min)
@@ -116,43 +117,10 @@ void Selection_sort(int* arr, int n, unsigned long long& count_of_comparison, un
 			arr[i] = arr[min];
 			arr[min] = temp;
 			count_of_exchanges++;
-			overhead_costs += 3;
 		}
 	}
 }
 
-/*
-void Selection_sort_Book(int* arr, int n, int& count_of_comparison, int& count_of_exchanges, int& overhead_costs)
-{
-	for (size_t i = 0; i < n-1; i++)
-	{
-		int min = i; int temp = arr[min];
-		for (size_t j= i+1; j < n; j++)
-		{
-			count_of_comparison++;
-			if (arr[j] < temp) { min = j, temp = arr[j]; count_of_exchanges++; overhead_costs++; }
-		}
-		arr[min] = arr[i]; arr[i] = temp;
-		overhead_costs += 4;
-
-	}
-}
-void Insertion_sort_Book(int* arr, int n, int& count_of_comparison, int& count_of_exchanges, int& overhead_costs)
-{
-	for (size_t i = 1; i < n; i++)
-	{
-		int temp = arr[i]; int j = i - 1;
-
-		while ((++count_of_comparison) && (j >= 0) && (temp < arr[j]))
-		{
-			arr[j + 1] = arr[j]; j--;
-			count_of_exchanges++;
-		}
-		arr[j + 1] = temp;
-		overhead_costs += 3;
-	}
-}
-*/
 
 int* Make_arr(int size)
 {
@@ -198,10 +166,11 @@ int main()
 	setlocale(LC_ALL, "ru");
 	srand(time(NULL));
 	int* arr = nullptr;
+	int arr[6] = { 15, 33, 42, 07, 12, 19 };
 
 	std::cout << "Введите размер массива: "; int size = getValue(15, "Введите размер массива: ");
 	
-	arr = Make_arr(size);
+	//arr = Make_arr(size);
 	std::cout << "\nИсходный массив:\n"; Show_arr(arr, size);
 
 	int user_choice = -1;
@@ -215,11 +184,7 @@ int main()
 		int temp = 0;
 		unsigned long long count_of_comparison = 0;
 		unsigned long long count_of_exchanges = 0;
-		unsigned long long overhead_costs = 0;
 
-		time_t  start_time; // начальное время
-		time_t  end_time;// конечное время
-		double  search_time;
 
 		if (user_choice != 4)
 		{
@@ -232,21 +197,18 @@ int main()
 		switch (user_choice)
 		{
 		case 1:
-			time(&start_time); // начальное время
-			Buble_sort(copy, size, count_of_comparison, count_of_exchanges, overhead_costs);
-			time(&end_time); // конечное время
+
+			Buble_sort(copy, size, count_of_comparison, count_of_exchanges);
 			std::cout << "\n  Метод обмена ";
 			break;
 		case 2:
-			time(&start_time); // начальное время
-			Insertion_sort(copy, size, count_of_comparison, count_of_exchanges, overhead_costs);
-			time(&end_time); // конечное время
+
+			Insertion_sort(copy, size, count_of_comparison, count_of_exchanges);
 			std::cout << "\n  Метод Вставок ";
 			break;
 		case 3:
-			time(&start_time); // начальное время
-			Selection_sort(copy, size, count_of_comparison, count_of_exchanges, overhead_costs);
-			time(&end_time); // конечное время
+
+			Selection_sort(copy, size, count_of_comparison, count_of_exchanges);
 			std::cout << "\n  Метод Выбора ";
 			break;
 		case 4:
@@ -258,10 +220,10 @@ int main()
 
 		if (user_choice != 4)
 		{
-			search_time = difftime(end_time, start_time); // искомое время
-			std::cout << "Анализ:\n" << " Время -" << search_time << "\n" << "1. Количество сравнений - " << count_of_comparison
-				<< "2. Количество перестановок - " << count_of_exchanges //<< std::endl;
-				<< "3. Накладные расходы - " << overhead_costs << std::endl << std::endl;
+
+			std::cout << "Анализ:\n" << "1. Количество сравнений - " << count_of_comparison
+				<< "\n2. Количество перестановок - " << count_of_exchanges << std::endl;
+
 		}
 
 		if (temp)
@@ -277,5 +239,5 @@ int main()
 		user_choice = getValue(17, "Выберите действие: ");
 	}
 
-	delete arr;
+	//delete arr;
 }
