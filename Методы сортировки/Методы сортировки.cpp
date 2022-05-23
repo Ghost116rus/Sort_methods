@@ -1,5 +1,6 @@
 ﻿// Методы сортировки.cpp : Этот файл содержит функцию "main". Здесь начинается и заканчивается выполнение программы.
 #include <iostream>
+#include <time.h> 
 
 int getValue(int condition, const char* string)
 {
@@ -63,7 +64,7 @@ void Buble_sort(int* arr, int n, unsigned long long& count_of_comparison, unsign
 				arr[j - 1] = arr[j];
 				arr[j] = temp;
 				count_of_exchanges++;
-				//overhead_costs += 2;
+				overhead_costs += 2;
 			}
 			count_of_comparison++;
 		}
@@ -75,22 +76,22 @@ void Insertion_sort(int* arr, int n, unsigned long long& count_of_comparison, un
 {
 	for (size_t i = 1; i < n; i++)
 	{
-		int j = i - 1; //overhead_costs++
+		int j = i - 1; overhead_costs++;
 
 		while ((++count_of_comparison)&&(j >= 0)&&(arr[i] < arr[j]))
 		{
-			j--; // overhead_costs++
+			j--;  overhead_costs++;
 		}
 
 		if ((j + 1) != i)
 		{
-			int temp = arr[i];	int l = i - 1;	//overhead_costs+=2;
+			int temp = arr[i];	int l = i - 1;	overhead_costs+=2;
 			while (l >= j + 1)
 			{
-				arr[l + 1] = arr[l]; l--;	//overhead_costs+=2;
+				arr[l + 1] = arr[l]; l--;	overhead_costs+=2;
 				count_of_exchanges++;
 			}
-			arr[j + 1] = temp;		//overhead_costs++;
+			arr[j + 1] = temp;		overhead_costs++;
 		}
 
 	}
@@ -106,7 +107,7 @@ void Selection_sort(int* arr, int n, unsigned long long& count_of_comparison, un
 			count_of_comparison++;
 			if (arr[j] < arr[min]) 
 			{ 
-				min = j; //overhead_costs++;
+				min = j; overhead_costs++;
 			}
 		}
 		if (i != min)
@@ -115,7 +116,7 @@ void Selection_sort(int* arr, int n, unsigned long long& count_of_comparison, un
 			arr[i] = arr[min];
 			arr[min] = temp;
 			count_of_exchanges++;
-			//overhead_costs += 3;
+			overhead_costs += 3;
 		}
 	}
 }
@@ -191,6 +192,7 @@ void Show_arr(int* arr, int size)
 	}
 }
 
+
 int main()
 {
 	setlocale(LC_ALL, "ru");
@@ -204,8 +206,8 @@ int main()
 
 	int user_choice = -1;
 
-	menu(); std::cout << "\nВыберите действие:";
-	user_choice = getValue(17, "Выберите действие:");
+	menu(); std::cout << "\nВыберите действие: ";
+	user_choice = getValue(17, "Выберите действие: ");
 
 	while (user_choice != 5)
 	{
@@ -215,6 +217,10 @@ int main()
 		unsigned long long count_of_exchanges = 0;
 		unsigned long long overhead_costs = 0;
 
+		time_t  start_time; // начальное время
+		time_t  end_time;// конечное время
+		double  search_time;
+
 		if (user_choice != 4)
 		{
 			std::cout << "\nВыводить отсортированный массив? 0 - нет, 1 - да\nВведите: ";
@@ -223,19 +229,24 @@ int main()
 			copy = Copy(arr, size);
 		}
 
-
 		switch (user_choice)
 		{
 		case 1:
+			time(&start_time); // начальное время
 			Buble_sort(copy, size, count_of_comparison, count_of_exchanges, overhead_costs);
+			time(&end_time); // конечное время
 			std::cout << "\n  Метод обмена ";
 			break;
 		case 2:
+			time(&start_time); // начальное время
 			Insertion_sort(copy, size, count_of_comparison, count_of_exchanges, overhead_costs);
+			time(&end_time); // конечное время
 			std::cout << "\n  Метод Вставок ";
 			break;
 		case 3:
+			time(&start_time); // начальное время
 			Selection_sort(copy, size, count_of_comparison, count_of_exchanges, overhead_costs);
+			time(&end_time); // конечное время
 			std::cout << "\n  Метод Выбора ";
 			break;
 		case 4:
@@ -247,9 +258,10 @@ int main()
 
 		if (user_choice != 4)
 		{
-			std::cout << "Анализ:\n" << "1. Количество сравнений - " << count_of_comparison
-				<< "2. Количество перестановок - " << count_of_exchanges << std::endl;
-			//	<< "3. Накладные расходы - " << overhead_costs << std::endl << std::endl;
+			search_time = difftime(end_time, start_time); // искомое время
+			std::cout << "Анализ:\n" << " Время -" << search_time << "\n" << "1. Количество сравнений - " << count_of_comparison
+				<< "2. Количество перестановок - " << count_of_exchanges //<< std::endl;
+				<< "3. Накладные расходы - " << overhead_costs << std::endl << std::endl;
 		}
 
 		if (temp)
@@ -261,8 +273,8 @@ int main()
 
 		delete copy; copy = nullptr;
 
-	std::cout << "\nВыберите действие:";
-		user_choice = getValue(17, "Выберите действие:");
+	std::cout << "\nВыберите действие: ";
+		user_choice = getValue(17, "Выберите действие: ");
 	}
 
 	delete arr;
