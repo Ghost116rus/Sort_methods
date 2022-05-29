@@ -52,7 +52,7 @@ int getValue(int condition, const char* string)
 }
 
 
-void Buble_sort(int* arr, int n, unsigned long long& count_of_comparison, unsigned long long& count_of_exchanges)
+void Bubble_sort(int* arr, int n, unsigned long long& count_of_comparison, unsigned long long& count_of_exchanges)
 {
 	for (size_t i = 1; i < n; i++)
 	{
@@ -197,7 +197,7 @@ int main()
 		{
 		case 1:
 
-			Buble_sort(copy, size, count_of_comparison, count_of_exchanges);
+			Bubble_sort(copy, size, count_of_comparison, count_of_exchanges);
 			std::cout << "\n  Метод обмена ";
 			break;
 		case 2:
